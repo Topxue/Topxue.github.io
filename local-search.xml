@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>测试</title>
+    <link href="/2021/03/19/first-blog/"/>
+    <url>/2021/03/19/first-blog/</url>
+    
+    <content type="html"><![CDATA[<p><code>  This is Test Blog.</code></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>web前端</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>前端</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>This is My first Blog.</title>
     <link href="/2020/11/04/hello-world/"/>
     <url>/2020/11/04/hello-world/</url>
