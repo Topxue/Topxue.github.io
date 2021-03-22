@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="Ives xue">
   <meta name="keywords" content="">
-  <title>测试 - Joker</title>
+  <title>我的第一个Node项目(学习记录) - Joker</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -163,7 +163,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="测试">
+            <span class="h2" id="subtitle" title="我的第一个Node项目(学习记录)">
               
             </span>
 
@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      4 字
+      1.1k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      1
+      19
        分钟
     </span>
   
@@ -225,10 +225,303 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">测试</h1>
+            <h1 style="display: none">我的第一个Node项目(学习记录)</h1>
             
             <div class="markdown-body">
-              <p><code>  This is Test Blog.</code></p>
+              <h2 id="1、创建文件夹，初始化项目"><a href="#1、创建文件夹，初始化项目" class="headerlink" title="1、创建文件夹，初始化项目"></a>1、创建文件夹，初始化项目</h2><pre><code class="hljs mipsasm">mkdir koa-app <span class="hljs-comment"># 创建目录</span>
+cd koa-app    <span class="hljs-comment"># 进入项目</span>
+npm init -y <span class="hljs-comment"># 生成package.json</span>
+npm <span class="hljs-keyword">install </span>koa koa-router koa-<span class="hljs-keyword">bodyparser </span> mysql2 sequelize require-<span class="hljs-keyword">directory </span>nodemon <span class="hljs-comment"># 下载所需依赖包</span>
+touch app.<span class="hljs-keyword">js </span><span class="hljs-comment"># 生成入口文件</span></code></pre>
+
+<h2 id="2、定义项目启动命令"><a href="#2、定义项目启动命令" class="headerlink" title="2、定义项目启动命令"></a>2、定义项目启动命令</h2><pre><code class="hljs json">&#123;
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;koa-app&quot;</span>,
+  <span class="hljs-attr">&quot;version&quot;</span>: <span class="hljs-string">&quot;1.0.0&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;&quot;</span>,
+  <span class="hljs-attr">&quot;main&quot;</span>: <span class="hljs-string">&quot;app.js&quot;</span>,
+  <span class="hljs-attr">&quot;scripts&quot;</span>: &#123;
+    <span class="hljs-attr">&quot;start:dev&quot;</span>: <span class="hljs-string">&quot;nodemon app.js&quot;</span>,
+    <span class="hljs-attr">&quot;start:prod&quot;</span>: <span class="hljs-string">&quot;node app.js&quot;</span>
+  &#125;,
+  <span class="hljs-attr">&quot;author&quot;</span>: <span class="hljs-string">&quot;Joker&quot;</span>,
+  <span class="hljs-attr">&quot;license&quot;</span>: <span class="hljs-string">&quot;ISC&quot;</span>,
+  <span class="hljs-attr">&quot;dependencies&quot;</span>: &#123;
+    <span class="hljs-attr">&quot;koa&quot;</span>: <span class="hljs-string">&quot;^2.13.1&quot;</span>,
+    <span class="hljs-attr">&quot;koa-router&quot;</span>: <span class="hljs-string">&quot;^10.0.0&quot;</span>,
+    <span class="hljs-attr">&quot;mysql2&quot;</span>: <span class="hljs-string">&quot;^2.2.5&quot;</span>,
+    <span class="hljs-attr">&quot;require-directory&quot;</span>: <span class="hljs-string">&quot;^2.1.1&quot;</span>,
+    <span class="hljs-attr">&quot;sequelize&quot;</span>: <span class="hljs-string">&quot;^6.5.1&quot;</span>
+  &#125;,
+  <span class="hljs-attr">&quot;devDependencies&quot;</span>: &#123;
+    <span class="hljs-attr">&quot;koa-bodyparser&quot;</span>: <span class="hljs-string">&quot;^4.3.0&quot;</span>,
+    <span class="hljs-attr">&quot;nodemon&quot;</span>: <span class="hljs-string">&quot;^2.0.7&quot;</span>
+  &#125;
+&#125;
+</code></pre>
+
+<h2 id="3、定义入口文件-app-js"><a href="#3、定义入口文件-app-js" class="headerlink" title="3、定义入口文件(app.js)"></a>3、定义入口文件(app.js)</h2><pre><code class="hljs app.js">const Koa &#x3D; require(&#39;koa&#39;)
+const bodyParser &#x3D; require(&#39;koa-bodyparser&#39;)
+
+const InitManger &#x3D; require(&#39;.&#x2F;core&#x2F;init&#39;)
+const catchErros &#x3D; require(&#39;.&#x2F;middlewares&#x2F;exception&#39;)
+
+const app &#x3D; new Koa()
+
+&#x2F;&#x2F; 全局错误处理
+app.use(catchErros)
+app.use(bodyParser())
+
+&#x2F;&#x2F; 初始化导入路由
+InitManger.initCore(app)
+
+
+const PORT &#x3D; process.env.PORT || 3000
+app.listen(PORT, () &#x3D;&gt; &#123;
+  console.log(&#96;Server is runing on $&#123;PORT&#125;!&#96;)
+&#125;)
+</code></pre>
+
+<h2 id="4、sequelize-连接-mysql"><a href="#4、sequelize-连接-mysql" class="headerlink" title="4、sequelize 连接 mysql"></a>4、sequelize 连接 mysql</h2><h4 id="安装相关依赖"><a href="#安装相关依赖" class="headerlink" title="安装相关依赖"></a>安装相关依赖</h4><pre><code class="hljs apache"><span class="hljs-attribute">npm</span> install mysql<span class="hljs-number">2</span> sequelize -S</code></pre>
+
+<h4 id="创建数据库配置文件"><a href="#创建数据库配置文件" class="headerlink" title="创建数据库配置文件"></a>创建数据库配置文件</h4><pre><code class="hljs routeros">mkdir config
+touch config/db.js</code></pre>
+
+<h4 id="定义数据库连接配置"><a href="#定义数据库连接配置" class="headerlink" title="定义数据库连接配置"></a>定义数据库连接配置</h4><pre><code class="hljs pgsql">// config/db.js
+
+ module.exports = &#123;
+  <span class="hljs-keyword">database</span>: &#123;
+    host: <span class="hljs-string">&#x27;localhost&#x27;</span>,
+    <span class="hljs-keyword">database</span>: <span class="hljs-string">&#x27;dbName&#x27;</span>,
+    <span class="hljs-keyword">user</span>: <span class="hljs-string">&#x27;root&#x27;</span>,
+    <span class="hljs-keyword">password</span>: <span class="hljs-string">&#x27;root-password&#x27;</span>
+  &#125;
+&#125;</code></pre>
+
+<h4 id="定义-sequelize-文件"><a href="#定义-sequelize-文件" class="headerlink" title="定义 sequelize 文件"></a>定义 sequelize 文件</h4><pre><code class="hljs pgsql">// config/<span class="hljs-keyword">index</span>.js
+
+const Sequelize = require(<span class="hljs-string">&#x27;sequelize&#x27;</span>)
+const &#123; host, <span class="hljs-keyword">database</span>, <span class="hljs-keyword">user</span>, <span class="hljs-keyword">password</span> &#125; = require(<span class="hljs-string">&#x27;../config/config&#x27;</span>).<span class="hljs-keyword">database</span>
+
+
+const sequelize = <span class="hljs-built_in">new</span> Sequelize(<span class="hljs-keyword">database</span>, <span class="hljs-keyword">user</span>, <span class="hljs-keyword">password</span>, &#123;
+  host,
+  dialect: <span class="hljs-string">&#x27;mysql&#x27;</span>,
+  logging: <span class="hljs-keyword">true</span>,
+  timezone: <span class="hljs-string">&#x27;+08:00&#x27;</span>,
+&#125;)
+
+sequelize.sync(&#123;
+  force: <span class="hljs-keyword">true</span>,
+&#125;)
+
+module.exports = sequelize
+</code></pre>
+
+<h4 id="定义-model"><a href="#定义-model" class="headerlink" title="定义 model"></a>定义 model</h4><pre><code class="hljs gams">mkdir <span class="hljs-keyword">models</span>
+touch <span class="hljs-keyword">models</span>/User.js</code></pre>
+
+<pre><code class="hljs routeros">const &#123; Sequelize, Model &#125; = require(<span class="hljs-string">&#x27;sequelize&#x27;</span>)
+const &#123; sequelize &#125; = require(<span class="hljs-string">&#x27;../config/sequelize&#x27;</span>)
+
+class<span class="hljs-built_in"> User </span>extends Model &#123; &#125;
+
+User.init(&#123;
+  nickname: Sequelize.STRING(32),
+  age: Sequelize.INTEGER(3),
+  sex: Sequelize.STRING(1)
+&#125;, &#123;
+  sequelize,
+  tableName: <span class="hljs-string">&#x27;user&#x27;</span>
+&#125;)
+
+module.exports = User
+</code></pre>
+
+<h2 id="5、定义路由"><a href="#5、定义路由" class="headerlink" title="5、定义路由"></a>5、定义路由</h2><pre><code class="hljs awk">mkdir app<span class="hljs-regexp">/api/</span>v1/
+touch app<span class="hljs-regexp">/api/</span>v1/user.js</code></pre>
+
+<pre><code class="hljs livescript"><span class="hljs-keyword">const</span> Router = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;koa-router&#x27;</span>)
+<span class="hljs-keyword">const</span> router = <span class="hljs-keyword">new</span> Router(&#123;
+  prefix: <span class="hljs-string">&#x27;/v1/user&#x27;</span>
+&#125;)
+
+router.get(<span class="hljs-string">&#x27;/post&#x27;</span>, <span class="hljs-keyword">async</span> (ctx) =&gt; &#123;
+  <span class="hljs-keyword">const</span> body = <span class="hljs-keyword">await</span> ctx.request.body
+
+  <span class="hljs-keyword">await</span> User.create(body)
+&#125;)
+
+<span class="hljs-built_in">module</span>.<span class="hljs-built_in">exports</span> = router</code></pre>
+
+<h2 id="6、定义全局异常处理中间件"><a href="#6、定义全局异常处理中间件" class="headerlink" title="6、定义全局异常处理中间件"></a>6、定义全局异常处理中间件</h2><pre><code class="hljs php">mkdir middlewares
+touch middlewares/<span class="hljs-built_in">exception</span>.js
+touch utils/http-<span class="hljs-built_in">exception</span>.js <span class="hljs-comment"># 定义已知异常类</span></code></pre>
+
+<pre><code class="hljs livescript"><span class="hljs-keyword">const</span> catchError = <span class="hljs-keyword">async</span> (ctx, next) =&gt; &#123;
+  <span class="hljs-keyword">try</span> &#123;
+    <span class="hljs-keyword">await</span> next()
+  &#125; <span class="hljs-keyword">catch</span> (error) &#123;
+    <span class="hljs-built_in">console</span>.log(error, <span class="hljs-string">&#x27;this is error...&#x27;</span>)
+  &#125;
+&#125;
+
+<span class="hljs-built_in">module</span>.<span class="hljs-built_in">exports</span> = catchError</code></pre>
+
+<h3 id="6-1、明确已知错误还是未知错误"><a href="#6-1、明确已知错误还是未知错误" class="headerlink" title="6.1、明确已知错误还是未知错误"></a>6.1、明确已知错误还是未知错误</h3><pre><code class="hljs scala"><span class="hljs-comment">// utils/http-exception.js</span>
+<span class="hljs-comment">/**</span>
+<span class="hljs-comment"> * 默认的异常</span>
+<span class="hljs-comment"> */</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HttpException</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Error</span> </span>&#123;
+  constructor(msg = &#x27;错误请求&#x27;, errorCode = <span class="hljs-number">10000</span>, code = <span class="hljs-number">400</span>) &#123;
+    <span class="hljs-keyword">super</span>()
+    <span class="hljs-keyword">this</span>.errorCode = errorCode
+    <span class="hljs-keyword">this</span>.code = code
+    <span class="hljs-keyword">this</span>.msg = msg
+  &#125;
+&#125;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ParameterException</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HttpException</span> </span>&#123;
+  constructor(msg, errorCode) &#123;
+    <span class="hljs-keyword">super</span>()
+    <span class="hljs-keyword">this</span>.code = <span class="hljs-number">400</span>
+    <span class="hljs-keyword">this</span>.msg = msg || &#x27;参数错误&#x27;
+    <span class="hljs-keyword">this</span>.errorCode = errorCode || <span class="hljs-number">10000</span>
+  &#125;
+&#125;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AuthFailed</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HttpException</span> </span>&#123;
+  constructor(msg, errorCode) &#123;
+    <span class="hljs-keyword">super</span>()
+    <span class="hljs-keyword">this</span>.code = <span class="hljs-number">401</span>
+    <span class="hljs-keyword">this</span>.mag = msg || &#x27;授权失败&#x27;
+    <span class="hljs-keyword">this</span>.errorCode = errorCode || <span class="hljs-number">10004</span>
+  &#125;
+&#125;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">NotFound</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HttpException</span> </span>&#123;
+  constructor(msg, errorCode) &#123;
+    <span class="hljs-keyword">super</span>()
+    <span class="hljs-keyword">this</span>.code = <span class="hljs-number">404</span>
+    <span class="hljs-keyword">this</span>.msg = msg || &#x27;未找到该资源&#x27;
+    <span class="hljs-keyword">this</span>.errorCode = errorCode || <span class="hljs-number">10005</span>
+  &#125;
+&#125;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Forbidden</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HttpException</span> </span>&#123;
+  constructor(msg, errorCode) &#123;
+    <span class="hljs-keyword">super</span>()
+    <span class="hljs-keyword">this</span>.code = <span class="hljs-number">403</span>
+    <span class="hljs-keyword">this</span>.msg = msg || &#x27;禁止访问&#x27;
+    <span class="hljs-keyword">this</span>.errorCode = errorCode || <span class="hljs-number">10006</span>
+  &#125;
+&#125;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Oversize</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HttpException</span> </span>&#123;
+  constructor(msg, errorCode) &#123;
+    <span class="hljs-keyword">super</span>()
+    <span class="hljs-keyword">this</span>.code = <span class="hljs-number">413</span>
+    <span class="hljs-keyword">this</span>.msg = msg || &#x27;上传文件过大&#x27;
+    <span class="hljs-keyword">this</span>.errorCode = errorCode || <span class="hljs-number">10007</span>
+  &#125;
+&#125;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">InternalServerError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HttpException</span> </span>&#123;
+  constructor(msg, errorCode) &#123;
+    <span class="hljs-keyword">super</span>()
+    <span class="hljs-keyword">this</span>.code = <span class="hljs-number">500</span>
+    <span class="hljs-keyword">this</span>.msg = msg || &#x27;服务器出错&#x27;
+    <span class="hljs-keyword">this</span>.errorCode = errorCode || <span class="hljs-number">10008</span>
+  &#125;
+&#125;
+
+module.exports = &#123;
+  <span class="hljs-type">HttpException</span>,
+  <span class="hljs-type">ParameterException</span>,
+  <span class="hljs-type">AuthFailed</span>,
+  <span class="hljs-type">NotFound</span>,
+  <span class="hljs-type">Forbidden</span>,
+  <span class="hljs-type">Oversize</span>,
+  <span class="hljs-type">InternalServerError</span>
+&#125;
+</code></pre>
+
+<h3 id="6-2、-定义异常处理中间件"><a href="#6-2、-定义异常处理中间件" class="headerlink" title="6.2、 定义异常处理中间件"></a>6.2、 定义异常处理中间件</h3><pre><code class="hljs javascript"><span class="hljs-comment">// middlewares/exception.js</span>
+<span class="hljs-keyword">const</span> &#123; HttpException &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../utils/http-exception&#x27;</span>)
+
+<span class="hljs-comment">// 全局异常监听</span>
+<span class="hljs-keyword">const</span> catchError = <span class="hljs-keyword">async</span>(ctx, next) =&gt; &#123;
+  <span class="hljs-keyword">try</span> &#123;
+    <span class="hljs-keyword">await</span> next()
+  &#125; <span class="hljs-function"><span class="hljs-title">catch</span>(<span class="hljs-params">error</span>)</span> &#123;
+    <span class="hljs-comment">// 已知异常</span>
+    <span class="hljs-keyword">const</span> isHttpException = error <span class="hljs-keyword">instanceof</span> HttpException
+    <span class="hljs-comment">// 开发环境</span>
+    <span class="hljs-keyword">const</span> isDev = <span class="hljs-built_in">global</span>.config.service.enviroment === <span class="hljs-string">&#x27;dev&#x27;</span>
+
+    <span class="hljs-comment">// 在控制台显示未知异常信息：开发环境下，不是HttpException 抛出异常</span>
+    <span class="hljs-keyword">if</span> (isDev &amp;&amp; !isHttpException) &#123;
+      <span class="hljs-keyword">throw</span> error
+    &#125;
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 是已知错误，还是未知错误</span>
+<span class="hljs-comment">     * 返回：</span>
+<span class="hljs-comment">     *      msg 错误信息</span>
+<span class="hljs-comment">     *      error_code 错误码</span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-keyword">if</span> (isHttpException) &#123;
+      ctx.body = &#123;
+        msg: error.msg,
+        error_code: error.errorCode
+      &#125;
+      ctx.response.status = error.code
+    &#125; <span class="hljs-keyword">else</span> &#123;
+      ctx.body = &#123;
+        msg: <span class="hljs-string">&#x27;未知错误&#x27;</span>,
+        error_code: <span class="hljs-number">9999</span>
+      &#125;
+      ctx.response.status = <span class="hljs-number">500</span>
+    &#125;
+  &#125;
+&#125;
+
+<span class="hljs-built_in">module</span>.exports = catchError
+</code></pre>
+
+<h2 id="7、全局自动注册路由"><a href="#7、全局自动注册路由" class="headerlink" title="7、全局自动注册路由"></a>7、全局自动注册路由</h2><pre><code class="hljs irpf90"><span class="hljs-keyword">touch</span> utils/initRouter<span class="hljs-number">.</span>js</code></pre>
+
+<pre><code class="hljs javascript"><span class="hljs-keyword">const</span> requireDirectory = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;require-directory&#x27;</span>)
+<span class="hljs-keyword">const</span> Router = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;koa-router&#x27;</span>)
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">InitManger</span> </span>&#123;
+  <span class="hljs-keyword">static</span> <span class="hljs-function"><span class="hljs-title">initCore</span>(<span class="hljs-params">app</span>)</span> &#123;
+
+    InitManger.app = app
+    InitManger.initLoadRouters()
+  &#125;
+
+  <span class="hljs-keyword">static</span> <span class="hljs-function"><span class="hljs-title">initLoadRouters</span>(<span class="hljs-params"></span>)</span> &#123;
+    <span class="hljs-keyword">const</span> apiDirectory = <span class="hljs-string">`<span class="hljs-subst">$&#123;process.cwd()&#125;</span>/app/api`</span>
+    requireDirectory(<span class="hljs-built_in">module</span>, apiDirectory, &#123;
+      visit: whenLoadModule
+    &#125;)
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">whenLoadModule</span>(<span class="hljs-params">obj</span>) </span>&#123;
+      <span class="hljs-keyword">if</span> (obj <span class="hljs-keyword">instanceof</span> Router) &#123;
+        InitManger.app.use(obj.routes())
+      &#125;
+    &#125;
+  &#125;
+&#125;
+
+
+<span class="hljs-built_in">module</span>.exports = InitManger</code></pre>
+
+<h2 id="8、访问接口"><a href="#8、访问接口" class="headerlink" title="8、访问接口"></a>8、访问接口</h2><p>访问接口地址 localhost:3000/api/v1/user/add<br>参数: {“nickname”: “JOKER”,”age”: “18”,”sex”: “男”}</p>
+<pre><code class="hljs json">&#123;
+    <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;用户添加成功&quot;</span>,
+    <span class="hljs-attr">&quot;code&quot;</span>: <span class="hljs-number">10000</span>
+&#125;</code></pre>
 
             </div>
             <hr>
@@ -238,7 +531,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a>
+                      <a class="hover-with-bg" href="/categories/Node/">Node</a>
                     
                   </div>
                 
@@ -246,7 +539,7 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E5%89%8D%E7%AB%AF/">前端</a>
+                      <a class="hover-with-bg" href="/tags/Node%E3%80%81Koa%E3%80%81mysql%E3%80%81sequelize/">Node、Koa、mysql、sequelize</a>
                     
                   </div>
                 
